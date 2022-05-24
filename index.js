@@ -17,7 +17,7 @@ const SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:643638325294:notificationEmail"
 const arr = []
 
 app.get('/', (req, res)=>{
-    res.send('Test API Clase CODERE AWS')
+    res.send('Test API Clase CODERE   AWS')
 })
 
 
