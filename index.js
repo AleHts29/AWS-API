@@ -1,4 +1,6 @@
 const express = require('express')
+require('dotenv').config()
+
 const AWS = require('aws-sdk')
 
 const app = express()
@@ -6,13 +8,13 @@ const PORT = process.env.PORT || 8086
 
 
 AWS.config.update({
-    region: 'us-east-1'
+    region:'us-east-1'
 })
 
 app.use(express.json());
-
-const sns = new AWS.SNS()
 const SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:643638325294:notificationEmail"
+const sns = new AWS.SNS()
+
 
 const arr = []
 
@@ -37,17 +39,29 @@ app.post('/api/user', (req, res)=>{
         Message: `nuevo usuario ${user}`, 
         Subject: 'Nuevo Usuario', 
         TopicArn: SNS_TOPIC_ARN
-    }).promise().then((data) =>{
+    }).promise().then(function(data){
         console.log('Se envio email')
         res.json({
             Operation: 'Save', 
             Message: 'Success',
             Item: req.body
         })
-    }).catch((err)=>{
-        console.log("Error")
-        res.send('Falla al enviar mail')
-    })
+    }).catch(function (err){
+            console.log("Error", err)
+            res.send('Falla al enviar mail')
+        })
+    
+    // .then((data) =>{
+    //     console.log('Se envio email')
+    //     res.json({
+    //         Operation: 'Save', 
+    //         Message: 'Success',
+    //         Item: req.body
+    //     })
+    // }).catch((err)=>{
+    //     console.log("Error")
+    //     res.send('Falla al enviar mail')
+    // })
 })
 
 app.listen(PORT, ()=>{
